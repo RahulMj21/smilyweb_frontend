@@ -1,0 +1,31 @@
+.singlePost {
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+  background: url("/images/bg-pat.png") center/cover no-repeat;
+
+  &::before {
+    position: absolute;
+    content: "";
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(
+      to bottom left,
+      #fff 20%,
+      rgba(255, 255, 255, 0.6)
+    );
+    z-index: -1;
+  }
+
+  .container:not(:first-child) {
+    padding: 5rem;
+    width: 650px;
+    height: calc(100vh - 80px);
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}

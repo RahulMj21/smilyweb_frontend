@@ -1,0 +1,122 @@
+.auth {
+  font-size: 1.6rem;
+  position: relative;
+  background: url("/images/bg-pat.png") center/cover no-repeat;
+  z-index: 1;
+  &::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    min-height: 115%;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: -1;
+  }
+  .container {
+    background: $color-white;
+    margin: 0 auto;
+    width: 50rem;
+    padding: 5rem 0;
+    height: 100vh;
+    overflow: scroll;
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+
+    .content {
+      padding: 2rem;
+      border: 1px solid $color-border;
+
+      form {
+        display: flex;
+        flex-direction: column;
+
+        .input-group {
+          height: 50px;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 2rem;
+
+          svg {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 2rem;
+            pointer-events: none;
+            color: $color-gray-1;
+          }
+
+          input {
+            border-radius: 4px;
+            font-size: 1.6rem;
+            height: 100%;
+            padding: 1rem;
+            padding-left: 4.5rem;
+            background: $color-input;
+            border: 1px solid $color-border;
+            &::placeholder {
+              color: $color-gray;
+            }
+          }
+          p {
+            color: $color-red;
+            font-size: 1.5rem;
+          }
+        }
+
+        .btn-brand {
+          margin: 1rem 0 4rem;
+          border-radius: 0.7rem;
+          justify-content: center;
+        }
+      }
+      .forgot-password {
+        margin-bottom: 1.5rem;
+        cursor: pointer;
+        color: $color-brand-dark;
+        font-weight: 500;
+        &:hover {
+          color: $color-brand;
+        }
+      }
+      .toggle-form {
+        @include flex-between(row);
+        margin-bottom: 2.5rem;
+        a {
+          color: blue;
+        }
+      }
+      .or {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+      .google-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 1rem;
+        height: 5rem;
+        background: $color-input;
+        border: 1px solid $color-border;
+        font-size: 1.8rem;
+        color: $color-gray-2;
+        @include transitionEase;
+        &:hover {
+          background: $color-white;
+        }
+        svg {
+          font-size: 3rem;
+          margin-right: 1.5rem;
+        }
+      }
+    }
+  }
+}

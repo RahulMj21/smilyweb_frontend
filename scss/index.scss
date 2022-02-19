@@ -1,0 +1,122 @@
+@import url("https://fonts.googleapis.com/css2?family=Courgette&family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap");
+@import "./variables";
+@import "./mixins";
+@import "./partials/home";
+@import "./partials/homeHeader";
+@import "./partials/auth";
+@import "./partials/header";
+@import "./partials/profile";
+@import "./partials/feed";
+@import "./partials/feedPost";
+@import "./partials/modal";
+@import "./partials/singlePost";
+
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background: #fff;
+  font-family: "Open Sans", sans-serif;
+  overflow-y: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+button,
+input,
+textarea {
+  margin: 0;
+  padding: 0;
+}
+button,
+input {
+  outline: none;
+  border: none;
+}
+a {
+  text-decoration: none;
+}
+
+section {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.container {
+  width: 935px;
+  max-width: 90%;
+  margin: 0 auto;
+}
+.red {
+  color: crimson;
+}
+.btn-brand {
+  @include btn;
+  background: linear-gradient(to bottom, #a98ce6, $color-brand);
+  color: $color-white;
+  border: 1px solid #a98ce6;
+  &:hover {
+    background: $color-white;
+    color: $color-brand;
+    border: 1px solid $color-brand;
+  }
+}
+.btn-outlined {
+  @include btn;
+  background: $color-white;
+  color: $color-brand;
+  border: 1px solid $color-brand;
+
+  &:hover {
+    background: linear-gradient(to bottom, #a98ce6, $color-brand);
+    color: $color-white;
+    border: 1px solid #a98ce6;
+  }
+}
+.heading-brand {
+  font-size: 4.5rem;
+  color: $color-brand;
+  font-family: "Courgette", cursive;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+#__react-alert__ div {
+  font-size: 1.6rem !important;
+  letter-spacing: 0.1rem;
+  text-transform: capitalize !important;
+}
+.section-heading {
+  position: relative;
+  font-size: 3rem;
+  color: $color-gray-2;
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: -3rem;
+  font-weight: 600;
+  &::before {
+    position: absolute;
+    content: "";
+    height: 2px;
+    width: 30rem;
+    left: 50%;
+    transform: translate(-50%);
+    bottom: -1rem;
+    background: $color-gray-2;
+  }
+}

@@ -1,0 +1,28 @@
+.header {
+  border-bottom: 1px solid $color-border;
+  .container {
+    height: 90px;
+    @include flex-between(row);
+  }
+  &__list {
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    a,
+    .header-link {
+      color: $color-gray-1;
+      @include transitionEase;
+      &:hover {
+        color: $color-gray;
+      }
+    }
+    .header-link {
+      cursor: pointer;
+    }
+    .btn-brand {
+      font-size: 1.5rem;
+      padding: 0.7rem 1.8rem;
+    }
+  }
+}

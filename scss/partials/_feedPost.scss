@@ -1,0 +1,165 @@
+.feedPost {
+  font-size: 1.5rem;
+  border: 1px solid $color-border;
+  border-radius: 4px;
+  margin-bottom: 4rem;
+  background: $color-white;
+  @include boxShadow;
+
+  &__header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid $color-border;
+    .top {
+      @include flex-between(row);
+      margin-bottom: 1.5rem;
+      .left {
+        @include flex-align-center(row);
+        img {
+          border-radius: 50% !important;
+          border: 2px solid $color-brand !important;
+        }
+        p {
+          margin-left: 1.2rem;
+          color: $color-gray-2;
+          font-weight: 500;
+          font-size: 1.6rem;
+        }
+      }
+      .right {
+        color: $color-gray-1;
+      }
+    }
+    .caption {
+      @include flex-align-center(row);
+      color: $color-gray-1;
+      gap: 1rem;
+      &__text {
+        flex: 1;
+      }
+      &__redirect {
+        font-size: 1.6rem;
+        color: $color-brand;
+        &:hover {
+          color: $color-gray-2;
+        }
+      }
+    }
+  }
+
+  &__body {
+    position: relative;
+    .heart {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      opacity: 0;
+      transform-origin: top left;
+      transform: scale(0) translate(-50%, -50%);
+      transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+      &.show {
+        opacity: 1;
+        transform: scale(1) translate(-50%, -50%);
+        display: block;
+      }
+      svg {
+        font-size: 10rem;
+        z-index: 1;
+      }
+    }
+  }
+
+  &__footer {
+    .actions {
+      @include flex-align-center(row);
+      p {
+        flex: 1;
+        @include flex-align-center(column);
+        border: 1px solid $color-border;
+        border-top: none;
+        padding: 0.9rem 1rem;
+        span {
+          font-size: 1.6rem;
+          color: $color-gray-2;
+          margin-top: 0.5rem;
+        }
+        svg {
+          font-size: 2.1rem;
+          cursor: pointer;
+        }
+      }
+    }
+    .comments {
+      margin-top: 2rem;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      .comment {
+        @include flex-align-center(row);
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        .userName {
+          text-transform: capitalize;
+          font-size: 1.6rem;
+          font-weight: 500;
+        }
+        .userComment {
+          color: $color-gray-1;
+        }
+      }
+      .btn-brand {
+        margin-top: 1rem;
+        justify-content: center !important;
+        padding: 0.5rem 1rem;
+        font-size: 1.4rem !important;
+        width: 10rem !important;
+      }
+    }
+  }
+  &__addComment {
+    position: relative;
+    @include flex-align-center(row);
+    border-top: 1px solid $color-border;
+    padding: 0 2rem;
+    width: 100%;
+    svg {
+      font-size: 2.2rem;
+    }
+    .chatIcon {
+      font-size: 2.6rem;
+      position: absolute;
+      pointer-events: none;
+      color: $color-gray-1;
+    }
+    input {
+      flex: 1;
+      height: 100%;
+      font-size: 1.6rem;
+      padding: 3rem 1rem;
+      padding-left: 3.5rem;
+      color: $color-gray-1;
+      letter-spacing: 0.4px;
+
+      &::placeholder {
+        color: $color-gray;
+      }
+    }
+    button {
+      background: transparent;
+      padding: 3rem 1rem;
+      svg {
+        cursor: pointer;
+        color: rgba($color: $color-brand-dark, $alpha: 0.8);
+        @include transitionEase;
+        &:hover {
+          color: rgba($color: $color-brand-dark, $alpha: 1);
+        }
+      }
+    }
+  }
+  &__image {
+    height: auto;
+    width: 100%;
+    border-bottom: 1px solid $color-border;
+  }
+}

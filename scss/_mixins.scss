@@ -1,0 +1,55 @@
+@mixin flex-between($direction) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: $direction;
+}
+
+@mixin flex-center($direction) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: $direction;
+}
+
+@mixin flex-align-center($direction) {
+  display: flex;
+  align-items: center;
+  flex-direction: $direction;
+}
+
+@mixin transitionEase {
+  transition: 0.4s ease;
+}
+
+@mixin btn {
+  font-size: 1.8rem;
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  padding: 1.2rem 3.5rem;
+  letter-spacing: 0.8px;
+  border-radius: 4rem;
+  cursor: pointer;
+  @include transitionEase;
+  svg {
+    font-size: 1.6rem;
+    margin-left: 0.8rem;
+    transform: translateX(0);
+    @include transitionEase;
+  }
+
+  &:hover {
+    svg {
+      transform: translateX(0.7rem);
+    }
+  }
+
+  &:active {
+    transform: scale(0.98);
+    transition: none;
+  }
+}
+@mixin boxShadow {
+  box-shadow: 1px 1px 30px 20px rgba($color: #000000, $alpha: 0.05);
+}

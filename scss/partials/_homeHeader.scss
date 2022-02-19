@@ -1,0 +1,31 @@
+.homeHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-bottom: 1px solid $color-border;
+  z-index: 1000;
+  .container {
+    @include flex-between(row);
+    height: 9rem;
+  }
+  &__logo {
+    font-family: "Courgette", cursive;
+    a {
+      font-size: 3rem;
+      color: $color-brand;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+    }
+  }
+  &__buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    .btn-brand,
+    .btn-outlined {
+      padding: 0.8rem 2rem;
+      font-size: 1.6rem;
+    }
+  }
+}
