@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { object, string, TypeOf } from "zod";
 import { useForm } from "react-hook-form";
@@ -11,6 +11,7 @@ import showConcentScreen from "../../utils/showConcentScreen";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../slices/userSlice";
 import { useAlert } from "react-alert";
+import Loader from "../../components/Loader";
 
 const createUserSchema = object({
   name: string({
@@ -40,6 +41,9 @@ const Register = () => {
   const alert = useAlert();
   const dispatch = useDispatch();
   const router = useRouter();
+
+  const [loading, setLoading] = useState<Boolean>(true);
+
   const {
     register,
     handleSubmit,
@@ -50,6 +54,7 @@ const Register = () => {
 
   const onSubmit = async (values: createUserInput) => {
     try {
+      setLoading(true);
       const { data } = await registerUser(values);
       dispatch(setUser(data.user));
       alert.success(data.message);
@@ -60,15 +65,20 @@ const Register = () => {
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchCurrentUser = async () => {
     try {
+      setLoading(true);
       const { data } = await getCurrentUser();
       if (data) router.push("/feed");
     } catch (error: any) {
       return;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,7 +86,9 @@ const Register = () => {
     fetchCurrentUser();
   }, []);
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <section className="auth">
       <div className="container">
         <div className="content">

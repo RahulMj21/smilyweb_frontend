@@ -30,8 +30,8 @@ export const updatePassword = (input: updatePasswordInput) =>
 
 export const fotgotPassword = () => api.get("/user/password/forgot");
 
-export const resetPassword = (input: any) =>
-  api.put("/user/password/reset/:token", input);
+export const resetPassword = (token: string, input: any) =>
+  api.put(`/user/password/reset/${token}`, input);
 
 export const updateUserInfo = (input: { name: string; email: string }) =>
   api.put("/user/details/update", input);

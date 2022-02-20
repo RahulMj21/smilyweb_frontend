@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../slices/userSlice";
 import Header from "../../components/Header";
 import PostModal from "../../components/PostModal";
+import Loader from "../../components/Loader";
 
 const updatePasswordSchema = object({
   currentPassword: string({
@@ -36,6 +37,7 @@ const UpdatePassword = () => {
   const alert = useAlert();
   const [showCreatePostModal, setShowCreatePostModal] =
     useState<Boolean>(false);
+  const [loading, setLoading] = useState<Boolean>(true);
 
   const {
     register,
@@ -47,6 +49,7 @@ const UpdatePassword = () => {
 
   const onSubmit = async (values: updatePasswordInput) => {
     try {
+      setLoading(true);
       const { data } = await updatePassword(values);
       alert.success(data.message);
       router.push("/profile/me");
@@ -56,15 +59,20 @@ const UpdatePassword = () => {
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchCurrentUser = async () => {
     try {
+      setLoading(true);
       const { data } = await getCurrentUser();
       dispatch(setUser(data.user));
     } catch (error: any) {
       router.push("/auth/login");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -72,7 +80,9 @@ const UpdatePassword = () => {
     fetchCurrentUser();
   }, []);
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <>
       {showCreatePostModal && (
         <PostModal setShowCreatePostModal={setShowCreatePostModal} />

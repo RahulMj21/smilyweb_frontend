@@ -1,10 +1,11 @@
 import Link from "next/link";
 import Router, { NextRouter, useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser, selectUser } from "../slices/userSlice";
 import { logoutUser } from "../utils/api";
+import Loader from "./Loader";
 
 const Header = (props: { setShowCreatePostModal: Function }) => {
   const user = useSelector(selectUser);
@@ -12,8 +13,11 @@ const Header = (props: { setShowCreatePostModal: Function }) => {
   const alert = useAlert();
   const router: NextRouter = useRouter();
 
+  const [loading, setLoading] = useState<Boolean>(false);
+
   const handleLogout = async () => {
     try {
+      setLoading(true);
       const { data } = await logoutUser();
       alert.success(data.message);
       dispatch(clearUser());
@@ -24,10 +28,14 @@ const Header = (props: { setShowCreatePostModal: Function }) => {
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     user && (
       <header className="header">
         <div className="container">

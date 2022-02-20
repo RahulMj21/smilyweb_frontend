@@ -13,6 +13,7 @@ import Link from "next/link";
 import { postInterface, selectPosts, setPosts } from "../slices/postSlice";
 import { io } from "socket.io-client";
 import { useAlert } from "react-alert";
+import Loader from "../components/Loader";
 
 export const socket = io(process.env.NEXT_PUBLIC_API_URL as string);
 
@@ -24,13 +25,17 @@ function feed() {
   const dispatch = useDispatch();
   const [showCreatePostModal, setShowCreatePostModal] =
     useState<Boolean>(false);
+  const [loading, setLoading] = useState<Boolean>(true);
 
   const fetchCurrentUser = async () => {
     try {
+      setLoading(true);
       const { data } = await getCurrentUser();
       dispatch(setUser(data.user));
     } catch (error: any) {
       router.push("/auth/login");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,10 +83,13 @@ function feed() {
 
   const fetchAllPosts = async () => {
     try {
+      setLoading(true);
       const { data } = await getAllPosts();
       dispatch(setPosts(data.posts));
     } catch (error: any) {
       alert.error("cannot fetch posts at the moment");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,7 +106,9 @@ function feed() {
     socket.on("postShared", (postId: string) => handlePostShare(postId));
   });
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     user && (
       <section className="feed">
         {showCreatePostModal && (

@@ -17,6 +17,7 @@ import { socket } from "../pages/feed";
 import { postInterface } from "../slices/postSlice";
 import { userInterface } from "../slices/userSlice";
 import { disLikePost, likePost, makeComment, sharePost } from "../utils/api";
+import Loader from "./Loader";
 import SingleComment from "./SingleComment";
 
 const FeedPost = (props: {
@@ -30,10 +31,12 @@ const FeedPost = (props: {
   const [toggleLike, setToggleLike] = useState<Boolean>(false);
   const [showLike, setShowLike] = useState<Boolean>(false);
   const [showAllComments, setShowAllComments] = useState<Boolean>(false);
+  const [loading, setLoading] = useState<Boolean>(false);
 
   const addComment = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      setLoading(true);
       if (!commentInputRef.current?.value) return;
       const { data } = await makeComment(post._id, {
         comment: commentInputRef.current?.value,
@@ -47,22 +50,36 @@ const FeedPost = (props: {
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleShare = async () => {
-    const origin =
-      typeof window !== "undefined" && window.location.origin
-        ? window.location.origin
-        : "";
-    navigator.clipboard.writeText(`${origin}/post/${post._id}`);
-    const { data } = await sharePost(post._id);
-    socket.emit("postShared", post._id);
-    alert.show(data.message);
+    try {
+      setLoading(true);
+      const origin =
+        typeof window !== "undefined" && window.location.origin
+          ? window.location.origin
+          : "";
+      navigator.clipboard.writeText(`${origin}/post/${post._id}`);
+      const { data } = await sharePost(post._id);
+      socket.emit("postShared", post._id);
+      alert.show(data.message);
+    } catch (error: any) {
+      alert.error(
+        error.response?.data?.message
+          ? error.response.data.message
+          : error.message
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleLike = async () => {
     try {
+      setLoading(true);
       const { data } = await likePost(post._id);
       setShowLike(true);
       setToggleLike(true);
@@ -75,11 +92,14 @@ const FeedPost = (props: {
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDisLike = async () => {
     try {
+      setLoading(true);
       const { data } = await disLikePost(post._id);
       setToggleLike(false);
       socket.emit("postUpdate", data.updatedPost);
@@ -90,6 +110,8 @@ const FeedPost = (props: {
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -99,7 +121,9 @@ const FeedPost = (props: {
       : setToggleLike(false);
   });
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     post && (
       <article className="feedPost">
         <div className="feedPost__header">

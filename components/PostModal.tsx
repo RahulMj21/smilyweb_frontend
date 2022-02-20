@@ -4,29 +4,39 @@ import { useAlert } from "react-alert";
 import { FaFileImage, FaHandPointRight, FaTimes } from "react-icons/fa";
 import { createPost } from "../utils/api";
 import { socket } from "../pages/feed";
+import Loader from "./Loader";
 
 const PostModal = (props: { setShowCreatePostModal: Function }) => {
   const alert = useAlert();
   const fileRef = useRef<HTMLInputElement>(null);
   const captionRef = useRef<HTMLInputElement>(null);
 
+  const [loading, setLoading] = useState<Boolean>(false);
   const [postImage, setPostImage] = useState<string | ArrayBuffer | null>(null);
 
   const createPostImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files: File[] = Array.from(
-      e.target.files as Iterable<File> | ArrayLike<File>
-    );
-    if (!files) return;
+    try {
+      setLoading(true);
+      const files: File[] = Array.from(
+        e.target.files as Iterable<File> | ArrayLike<File>
+      );
+      if (!files) return;
 
-    const reader = new FileReader();
-    reader.readAsDataURL(files[0]);
-    reader.onloadend = function () {
-      setPostImage(reader.result);
-    };
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onloadend = function () {
+        setPostImage(reader.result);
+      };
+    } catch (error: any) {
+      alert.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const submitPost = async () => {
     try {
+      setLoading(true);
       if (!captionRef.current?.value || !postImage) return;
       const { data } = await createPost({
         image: postImage as string,
@@ -34,18 +44,21 @@ const PostModal = (props: { setShowCreatePostModal: Function }) => {
       });
       alert.success(data.message);
       socket.emit("postNew", data.post);
-      props.setShowCreatePostModal(false);
     } catch (error: any) {
       alert.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
       props.setShowCreatePostModal(false);
     }
   };
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <div className="modal">
       <div
         className="overlay"

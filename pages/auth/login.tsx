@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { object, string, TypeOf } from "zod";
 import { useForm } from "react-hook-form";
@@ -11,6 +11,7 @@ import { FaEnvelope, FaLock } from "react-icons/fa";
 import { setUser } from "../../slices/userSlice";
 import { useDispatch } from "react-redux";
 import { useAlert } from "react-alert";
+import Loader from "../../components/Loader";
 
 const loginUserSchema = object({
   email: string({
@@ -30,6 +31,8 @@ const Login = () => {
   const router = useRouter();
   const alert = useAlert();
 
+  const [loading, setLoading] = useState<Boolean>(true);
+
   const {
     register,
     handleSubmit,
@@ -40,6 +43,7 @@ const Login = () => {
 
   const onSubmit = async (values: loginUserInput) => {
     try {
+      setLoading(true);
       const { data } = await loginUser(values);
       dispatch(setUser(data.user));
       alert.success(data.message);
@@ -50,15 +54,20 @@ const Login = () => {
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchCurrentUser = async () => {
     try {
+      setLoading(true);
       const { data } = await getCurrentUser();
       if (data) router.push("/feed");
     } catch (error: any) {
       return;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,7 +75,9 @@ const Login = () => {
     fetchCurrentUser();
   }, []);
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <section className="auth">
       <div className="container">
         <div className="content">

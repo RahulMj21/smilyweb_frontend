@@ -7,24 +7,36 @@ import { NextRouter, useRouter } from "next/router";
 import { getCurrentUser } from "../utils/api";
 import { selectIsLoggedIn, setUser } from "../slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Loader from "../components/Loader";
+import { AlertManager, useAlert } from "react-alert";
 
 const Home: NextPage = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const dispatch = useDispatch();
+  const alert: AlertManager = useAlert();
   const router: NextRouter = useRouter();
 
+  const [loading, setLoading] = useState<Boolean>(true);
+
   const fetchUser = async () => {
-    if (isLoggedIn) {
-      router.push("/feed");
-    } else {
-      try {
+    try {
+      setLoading(true);
+      if (isLoggedIn) {
+        router.push("/feed");
+      } else {
         const { data } = await getCurrentUser();
         dispatch(setUser(data.user));
         router.push("/feed");
-      } catch (error: any) {
-        return;
       }
+    } catch (error: any) {
+      alert.error(
+        error.response?.data?.message
+          ? error.response.data.message
+          : error.message
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -32,7 +44,9 @@ const Home: NextPage = () => {
     fetchUser();
   }, []);
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <>
       <HomeHeader />
       <section className="home">

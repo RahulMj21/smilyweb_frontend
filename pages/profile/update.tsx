@@ -11,6 +11,7 @@ import {
   updateUserInfo,
 } from "../../utils/api";
 import { useAlert } from "react-alert";
+import Loader from "../../components/Loader";
 
 const UpdateProfile = () => {
   const user = useSelector(selectUser);
@@ -24,12 +25,14 @@ const UpdateProfile = () => {
     useState<Boolean>(false);
   const [name, setName] = useState<string>();
   const [email, setEmail] = useState<string>();
+  const [loading, setLoading] = useState<Boolean>(true);
   const [updateImage, setUpdateImage] = useState<string | ArrayBuffer | null>(
     null
   );
 
   const handleUpdateInfo = async () => {
     try {
+      setLoading(true);
       if (user !== null) {
         if (!name && !email) return alert.info("nothing to change");
         const { data } = await updateUserInfo({
@@ -45,10 +48,14 @@ const UpdateProfile = () => {
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
+
   const handleUpdateAvatar = async () => {
     try {
+      setLoading(true);
       const { data } = await updateUserAvatar(updateImage as string);
       alert.success(data.message);
       router.push("/profile/me");
@@ -58,28 +65,40 @@ const UpdateProfile = () => {
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
   const createUpdateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files: File[] = Array.from(
-      e.target.files as Iterable<File> | ArrayLike<File>
-    );
-    if (!files) return;
+    try {
+      setLoading(true);
+      const files: File[] = Array.from(
+        e.target.files as Iterable<File> | ArrayLike<File>
+      );
+      if (!files) return;
 
-    const reader = new FileReader();
-    reader.readAsDataURL(files[0]);
-    reader.onloadend = function () {
-      setUpdateImage(reader.result);
-    };
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onloadend = function () {
+        setUpdateImage(reader.result);
+      };
+    } catch (error: any) {
+      alert.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchCurrentUser = async () => {
     try {
+      setLoading(true);
       const { data } = await getCurrentUser();
       dispatch(setUser(data.user));
     } catch (error: any) {
       router.push("/auth/login");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -87,7 +106,9 @@ const UpdateProfile = () => {
     fetchCurrentUser();
   }, [!user]);
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     user && (
       <section className="profile">
         {showCreatePostModal && (

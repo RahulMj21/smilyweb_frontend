@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { object, string, TypeOf } from "zod";
 import { useForm } from "react-hook-form";
-import { loginUser } from "../../utils/api";
-import { useRouter } from "next/router";
+import { resetPassword } from "../../utils/api";
+import { NextRouter, useRouter } from "next/router";
 import { FaLock, FaUnlockAlt } from "react-icons/fa";
+import { AlertManager, useAlert } from "react-alert";
+import Loader from "../../components/Loader";
 
 const resetPasswordSchema = object({
   newPassword: string({
@@ -23,8 +25,17 @@ const resetPasswordSchema = object({
 export type resetPasswordInput = TypeOf<typeof resetPasswordSchema>;
 
 const ResetPassword = () => {
-  const router = useRouter();
-  const [resetError, setResetError] = useState<string>("");
+  const alert: AlertManager = useAlert();
+  const router: NextRouter = useRouter();
+
+  const [loading, setLoading] = useState<Boolean>(false);
+
+  const token = (
+    typeof window !== "undefined" && window.location.href
+      ? window.location.href
+      : ""
+  ).split("/auth/resetpassword/")[1];
+
   const {
     register,
     handleSubmit,
@@ -33,26 +44,30 @@ const ResetPassword = () => {
     resolver: zodResolver(resetPasswordSchema),
   });
 
-  const onSubmit = async (values: resetPasswordInput) => {
+  const onSubmit = async (input: resetPasswordInput) => {
     try {
-      //   const { data } = await loginUser(values);
-      //   console.log(data);
+      setLoading(true);
+      const { data } = await resetPassword(token, input);
+      alert.success(data.message);
       router.push("/auth/login");
     } catch (error: any) {
-      setResetError(
+      alert.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <section className="auth">
       <div className="container">
         <div className="content">
           <h1 className="heading-brand">SmilyWeb</h1>
-          <p>{resetError && resetError}</p>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="input-group">
               <FaLock />

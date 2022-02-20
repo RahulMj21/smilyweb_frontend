@@ -6,6 +6,7 @@ import { useAlert } from "react-alert";
 import { FaExternalLinkAlt, FaTools, FaUnlockAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/Header";
+import Loader from "../../components/Loader";
 import PostModal from "../../components/PostModal";
 import { postInterface } from "../../slices/postSlice";
 import { selectUser, setUser, userInterface } from "../../slices/userSlice";
@@ -28,6 +29,7 @@ const singleUser = () => {
   const [showCreatePostModal, setShowCreatePostModal] =
     useState<Boolean>(false);
   const [isFollowing, setIsFollowing] = useState<Boolean>(false);
+  const [loading, setLoading] = useState<Boolean>(true);
 
   const userId = (
     typeof window !== "undefined" && window.location.href
@@ -42,15 +44,19 @@ const singleUser = () => {
 
   const fetchCurrentUser = async () => {
     try {
+      setLoading(true);
       const { data } = await getCurrentUser();
       dispatch(setUser(data.user));
     } catch (error: any) {
       router.push("/auth/login");
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchTargetedUser = async () => {
     try {
+      setLoading(true);
       const { data } = await getSingleUser(userId);
       setTargetedUser(data.user);
     } catch (error: any) {
@@ -59,21 +65,27 @@ const singleUser = () => {
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchUserAllPosts = async (id: string) => {
     try {
+      setLoading(true);
       const { data } = await getUserAllPosts(id);
       setPosts(data.posts);
     } catch (error: any) {
       setPosts([]);
       alert.error("cannot fetch posts at the moment");
+    } finally {
+      setLoading(false);
     }
   };
 
   const followUser = async () => {
     try {
+      setLoading(true);
       const { data } = await doFollowUser(userId);
       alert.success(data.message);
       setIsFollowing(true);
@@ -83,11 +95,14 @@ const singleUser = () => {
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
   const unFollowUser = async () => {
     try {
+      setLoading(true);
       const { data } = await doUnFollowUser(userId);
       alert.success(data.message);
       setIsFollowing(false);
@@ -97,6 +112,8 @@ const singleUser = () => {
           ? error.response.data.message
           : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,9 +130,10 @@ const singleUser = () => {
         : setIsFollowing(false);
   }, [targetedUser]);
 
-  return (
-    targetedUser &&
-    user && (
+  return loading ? (
+    <Loader />
+  ) : (
+    targetedUser && user && (
       <section className="profile">
         {showCreatePostModal && (
           <PostModal setShowCreatePostModal={setShowCreatePostModal} />
