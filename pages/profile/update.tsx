@@ -40,7 +40,7 @@ const UpdateProfile = () => {
           email: email ? email : user.email,
         });
         alert.success(data.message);
-        router.push("/profile/me");
+        router.push(`/profile/${user._id}`);
       }
     } catch (error: any) {
       alert.error(
@@ -55,10 +55,11 @@ const UpdateProfile = () => {
 
   const handleUpdateAvatar = async () => {
     try {
+      if (!user) return;
       setLoading(true);
       const { data } = await updateUserAvatar(updateImage as string);
       alert.success(data.message);
-      router.push("/profile/me");
+      router.push(`/profile/${user._id}`);
     } catch (error: any) {
       alert.error(
         error.response?.data?.message
@@ -71,23 +72,17 @@ const UpdateProfile = () => {
   };
 
   const createUpdateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      setLoading(true);
-      const files: File[] = Array.from(
-        e.target.files as Iterable<File> | ArrayLike<File>
-      );
-      if (!files) return;
+    setLoading(true);
+    const files: File[] = Array.from(
+      e.target.files as Iterable<File> | ArrayLike<File>
+    );
+    if (!files) return;
 
-      const reader = new FileReader();
-      reader.readAsDataURL(files[0]);
-      reader.onloadend = function () {
-        setUpdateImage(reader.result);
-      };
-    } catch (error: any) {
-      alert.error(error.message);
-    } finally {
-      setLoading(false);
-    }
+    const reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+    reader.onloadend = function () {
+      setUpdateImage(reader.result);
+    };
   };
 
   const fetchCurrentUser = async () => {

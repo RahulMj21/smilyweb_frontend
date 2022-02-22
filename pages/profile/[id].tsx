@@ -89,6 +89,7 @@ const singleUser = () => {
       const { data } = await doFollowUser(userId);
       alert.success(data.message);
       setIsFollowing(true);
+      fetchTargetedUser();
     } catch (error: any) {
       alert.error(
         error.response?.data?.message
@@ -106,6 +107,7 @@ const singleUser = () => {
       const { data } = await doUnFollowUser(userId);
       alert.success(data.message);
       setIsFollowing(false);
+      fetchTargetedUser();
     } catch (error: any) {
       alert.error(
         error.response?.data?.message
@@ -119,9 +121,12 @@ const singleUser = () => {
 
   useEffect(() => {
     fetchCurrentUser();
-    fetchTargetedUser();
     fetchUserAllPosts(userId);
   }, []);
+
+  useEffect(() => {
+    fetchTargetedUser();
+  }, [userId]);
 
   useEffect(() => {
     if (targetedUser && user)
@@ -159,7 +164,8 @@ const singleUser = () => {
                   {posts.length} {posts.length > 1 ? "posts" : "post"}
                 </p>
                 <p className="followers">
-                  {targetedUser.followers.length} followers
+                  {targetedUser.followers.length}{" "}
+                  {targetedUser.followers.length > 1 ? "followers" : "follower"}
                 </p>
                 <p className="posts">
                   {targetedUser.following.length} following
@@ -199,7 +205,7 @@ const singleUser = () => {
               {posts && posts.length ? (
                 <div className="profile__posts">
                   {posts.map((post) => (
-                    <div className="postImages">
+                    <div className="postImages" key={post._id}>
                       <img
                         src={post.image.secure_url}
                         alt="post"

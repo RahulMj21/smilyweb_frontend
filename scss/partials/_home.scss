@@ -16,9 +16,23 @@
     z-index: -1;
   }
   .container {
-    min-height: 100vh;
+    position: relative;
+    top: 80px;
+    height: calc(100vh - 80px);
+    overflow-y: scroll;
     @include flex-between(row);
     gap: 3rem;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    .btn-brand {
+      margin-bottom: 4rem;
+    }
+    @include media-md {
+      flex-direction: column-reverse !important;
+    }
   }
   &__heading {
     font-size: 6rem;

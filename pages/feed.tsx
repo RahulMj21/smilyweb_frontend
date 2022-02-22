@@ -164,8 +164,7 @@ function feed() {
               </div>
             </div>
             <p className="joined">
-              <span>Joined on</span> :{" "}
-              {moment(user.createdAt).format("Do MMMM YYYY")}
+              <span>Joined on</span> : {moment(user.createdAt).format("L")}
             </p>
             <button
               className="create-post btn-brand"

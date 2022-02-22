@@ -30,11 +30,7 @@ const Home: NextPage = () => {
         router.push("/feed");
       }
     } catch (error: any) {
-      alert.error(
-        error.response?.data?.message
-          ? error.response.data.message
-          : error.message
-      );
+      return;
     } finally {
       setLoading(false);
     }

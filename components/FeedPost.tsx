@@ -31,12 +31,10 @@ const FeedPost = (props: {
   const [toggleLike, setToggleLike] = useState<Boolean>(false);
   const [showLike, setShowLike] = useState<Boolean>(false);
   const [showAllComments, setShowAllComments] = useState<Boolean>(false);
-  const [loading, setLoading] = useState<Boolean>(false);
 
   const addComment = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      setLoading(true);
       if (!commentInputRef.current?.value) return;
       const { data } = await makeComment(post._id, {
         comment: commentInputRef.current?.value,
@@ -50,14 +48,11 @@ const FeedPost = (props: {
           ? error.response.data.message
           : error.message
       );
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleShare = async () => {
     try {
-      setLoading(true);
       const origin =
         typeof window !== "undefined" && window.location.origin
           ? window.location.origin
@@ -72,14 +67,11 @@ const FeedPost = (props: {
           ? error.response.data.message
           : error.message
       );
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleLike = async () => {
     try {
-      setLoading(true);
       const { data } = await likePost(post._id);
       setShowLike(true);
       setToggleLike(true);
@@ -92,26 +84,21 @@ const FeedPost = (props: {
           ? error.response.data.message
           : error.message
       );
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleDisLike = async () => {
     try {
-      setLoading(true);
       const { data } = await disLikePost(post._id);
+      alert.success(data.message);
       setToggleLike(false);
       socket.emit("postUpdate", data.updatedPost);
-      alert.success(data.message);
     } catch (error: any) {
       alert.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
       );
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -121,9 +108,7 @@ const FeedPost = (props: {
       : setToggleLike(false);
   });
 
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     post && (
       <article className="feedPost">
         <div className="feedPost__header">
@@ -146,11 +131,9 @@ const FeedPost = (props: {
                   />
                 </a>
               </Link>
-              <p>{post.postCreator.name}</p>
+              <p>{post.postCreator.name.split(" ")[0]}</p>
             </div>
-            <div className="right">
-              {moment(post.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
-            </div>
+            <div className="right">{moment(post.createdAt).format("lll")}</div>
           </div>
           <div className="caption">
             <FaArrowRight className="caption__icon" />

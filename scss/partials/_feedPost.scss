@@ -11,15 +11,16 @@
     border-bottom: 1px solid $color-border;
     .top {
       @include flex-between(row);
+      gap: 1rem;
       margin-bottom: 1.5rem;
       .left {
         @include flex-align-center(row);
+        gap: 1rem;
         img {
           border-radius: 50% !important;
           border: 2px solid $color-brand !important;
         }
         p {
-          margin-left: 1.2rem;
           color: $color-gray-2;
           font-weight: 500;
           font-size: 1.6rem;
@@ -27,6 +28,7 @@
       }
       .right {
         color: $color-gray-1;
+        text-align: right;
       }
     }
     .caption {
@@ -77,8 +79,19 @@
         @include flex-align-center(column);
         border: 1px solid $color-border;
         border-top: none;
-        padding: 0.9rem 1rem;
+        padding: 0.9rem 0.5rem;
+        @include media-sm {
+          padding: 0.9rem 0.2rem;
+          span {
+            font-size: 1.5rem !important;
+          }
+          svg {
+            font-size: 1.5rem !important;
+          }
+        }
+
         span {
+          text-align: center;
           font-size: 1.6rem;
           color: $color-gray-2;
           margin-top: 0.5rem;
@@ -95,7 +108,7 @@
       display: flex;
       flex-direction: column;
       .comment {
-        @include flex-align-center(row);
+        display: flex;
         gap: 0.5rem;
         margin-bottom: 1rem;
         .userName {

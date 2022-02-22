@@ -3,7 +3,28 @@
   .container {
     height: 90px;
     @include flex-between(row);
+    gap: 1rem !important;
   }
+
+  @include media-md {
+    &__list {
+      font-size: 1.5rem !important;
+      gap: 1rem !important;
+      .btn-brand {
+        padding: 0.5rem 1rem !important;
+      }
+    }
+  }
+
+  @include media-sm {
+    &__list {
+      gap: 0.7rem !important;
+      .btn-brand {
+        padding: 0.6rem 0.7rem !important;
+      }
+    }
+  }
+
   &__list {
     font-size: 1.6rem;
     display: flex;
@@ -12,13 +33,11 @@
     a,
     .header-link {
       color: $color-gray-1;
+      cursor: pointer;
       @include transitionEase;
       &:hover {
         color: $color-gray;
       }
-    }
-    .header-link {
-      cursor: pointer;
     }
     .btn-brand {
       font-size: 1.5rem;

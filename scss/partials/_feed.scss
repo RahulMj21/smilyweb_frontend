@@ -25,6 +25,9 @@
     height: calc(100vh - 100px);
     width: 65%;
     overflow: scroll;
+    @include media-lg {
+      width: 100%;
+    }
 
     /* Hide scrollbar for Chrome, Safari and Opera */
     &::-webkit-scrollbar {
@@ -40,6 +43,32 @@
     width: 35%;
     padding: 2rem;
     border: 1px solid $color-border;
+    @include media-lg {
+      padding: 1rem !important;
+      .top {
+        flex-direction: column !important;
+        gap: 1rem !important;
+        img {
+          width: 2.5rem !important;
+        }
+      }
+      p {
+        font-size: 1.3rem !important;
+      }
+      .btn-brand {
+        font-size: 1.3rem !important;
+        padding: 0.7rem 1.5rem !important;
+        svg {
+          font-size: 1.3rem;
+        }
+      }
+      .joined {
+        margin-bottom: 2.5rem !important;
+      }
+    }
+    @include media-md {
+      display: none;
+    }
 
     .content {
       @include flex-between(row);
@@ -74,10 +103,14 @@
       font-weight: 500;
       color: $color-gray-0;
       margin-bottom: 4rem;
+      @include flex-align-center(row);
+      gap: 0.5rem;
+      text-align: left;
       span {
         padding: 0.5rem 1.5rem;
         background: rgba($color: $color-border, $alpha: 0.7);
         color: $color-brand;
+        white-space: nowrap;
         border-radius: 3rem;
         font-weight: 600;
       }

@@ -9,6 +9,26 @@
     @include flex-between(row);
     height: 9rem;
   }
+  @include media-md {
+    &__logo a {
+      font-size: 2.5rem !important;
+    }
+    &__buttons .btn-brand,
+    &__buttons .btn-outlined {
+      font-size: 1.5rem !important;
+      padding: 0.5rem 1.3rem !important;
+    }
+  }
+  @include media-sm {
+    &__logo a {
+      font-size: 2rem !important;
+    }
+    &__buttons .btn-brand,
+    &__buttons .btn-outlined {
+      font-size: 1.5rem !important;
+      padding: 0.4rem 1rem !important;
+    }
+  }
   &__logo {
     font-family: "Courgette", cursive;
     a {

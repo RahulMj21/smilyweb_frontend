@@ -41,7 +41,7 @@ export const updateUserAvatar = (input: string) =>
 
 export const doFollowUser = (id: string) => api.put(`/user/follow/${id}`);
 
-export const doUnFollowUser = (id: string) => api.put(`/user/unfollower/${id}`);
+export const doUnFollowUser = (id: string) => api.put(`/user/unfollow/${id}`);
 
 // post -------------------------------->
 export const createPost = (input: { image: string; caption: string }) =>

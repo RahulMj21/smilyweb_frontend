@@ -1,11 +1,15 @@
 .profile {
   height: 100vh;
   overflow-y: scroll;
+  @include media-md {
+    &__userDetails {
+      flex-direction: column !important;
+    }
+  }
   &__userDetails {
     padding: 5rem 0;
     border-bottom: 1px solid $color-border;
-    display: flex;
-    align-items: center;
+    @include flex-align-center(row);
     gap: 4rem;
     &__left {
       @include flex-align-center(column);
@@ -64,6 +68,7 @@
           border-radius: 0.4rem;
           letter-spacing: 0.5px;
           text-transform: capitalize;
+          text-align: center;
         }
       }
       .user-inputs {
@@ -71,6 +76,20 @@
         flex-direction: column;
         gap: 1.5rem;
         margin-bottom: 3rem;
+        @include media-sm {
+          gap: 1rem !important;
+          label {
+            font-size: 1.5rem !important;
+          }
+          .user-input {
+            font-size: 1.5rem !important;
+            padding: 1rem;
+          }
+        }
+        .input-group {
+          display: flex;
+          flex-wrap: nowrap !important;
+        }
         label {
           font-size: 1.8rem;
           color: $color-gray-2;
@@ -92,6 +111,10 @@
       }
       .edit-buttons {
         @include flex-align-center(row);
+        @include media-sm {
+          align-items: flex-start !important;
+          flex-direction: column !important;
+        }
         gap: 1rem;
         .btn-brand {
           padding: 0.9rem 2.7rem;

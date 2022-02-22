@@ -16,7 +16,6 @@ const PostModal = (props: { setShowCreatePostModal: Function }) => {
 
   const createPostImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      setLoading(true);
       const files: File[] = Array.from(
         e.target.files as Iterable<File> | ArrayLike<File>
       );
@@ -29,8 +28,6 @@ const PostModal = (props: { setShowCreatePostModal: Function }) => {
       };
     } catch (error: any) {
       alert.error(error.message);
-    } finally {
-      setLoading(false);
     }
   };
 

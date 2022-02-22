@@ -53,3 +53,19 @@
 @mixin boxShadow {
   box-shadow: 1px 1px 30px 20px rgba($color: #000000, $alpha: 0.05);
 }
+
+@mixin media-lg {
+  @media screen and (max-width: 1024px) {
+    @content;
+  }
+}
+@mixin media-md {
+  @media screen and (max-width: 800px) {
+    @content;
+  }
+}
+@mixin media-sm {
+  @media screen and (max-width: 480px) {
+    @content;
+  }
+}
