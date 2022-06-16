@@ -1,9 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../app/store";
 
+export interface Comment {
+  user: {
+    name: string;
+    _id: string;
+  };
+  comment: string;
+  time: Date;
+}
+
 export interface postInterface {
   caption: string;
-  comments: [] | [{ user: string; name: string; comment: string }];
+  comments: [] | Comment[];
   createdAt: string;
   image: {
     public_id: string;
@@ -13,7 +22,6 @@ export interface postInterface {
   postCreator: {
     _id: string;
     name: string;
-    email: string;
     avatar: { public_id: string; secure_url: string };
   };
   shares: number;

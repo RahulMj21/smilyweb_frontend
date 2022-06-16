@@ -61,6 +61,7 @@ const UpdateProfile = () => {
       alert.success(data.message);
       router.push(`/profile/${user._id}`);
     } catch (error: any) {
+      console.log(error);
       alert.error(
         error.response?.data?.message
           ? error.response.data.message
@@ -72,7 +73,6 @@ const UpdateProfile = () => {
   };
 
   const createUpdateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLoading(true);
     const files: File[] = Array.from(
       e.target.files as Iterable<File> | ArrayLike<File>
     );

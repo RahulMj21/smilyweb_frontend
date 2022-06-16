@@ -2,23 +2,23 @@ import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { object, string, TypeOf } from "zod";
 import { useForm } from "react-hook-form";
-import { resetPassword } from "../../utils/api";
+import { resetPassword } from "../../../utils/api";
 import { NextRouter, useRouter } from "next/router";
 import { FaLock, FaUnlockAlt } from "react-icons/fa";
 import { AlertManager, useAlert } from "react-alert";
-import Loader from "../../components/Loader";
+import Loader from "../../../components/Loader";
 
 const resetPasswordSchema = object({
-  newPassword: string({
+  password: string({
     required_error: "please provide new password",
   })
     .nonempty("password is required")
     .min(6, "new password should be atleast 6 characters long"),
-  confirmNewPassword: string({
+  confirmPassword: string({
     required_error: "please provide confirm new password",
   }),
-}).refine((data) => data.newPassword === data.confirmNewPassword, {
-  message: "new password field dosen't matches with the confirm new password",
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "password field dosen't matches with the confirm password",
   path: ["confirmNewPassword"],
 });
 
@@ -30,11 +30,13 @@ const ResetPassword = () => {
 
   const [loading, setLoading] = useState<Boolean>(false);
 
-  const token = (
-    typeof window !== "undefined" && window.location.href
-      ? window.location.href
-      : ""
-  ).split("/auth/resetpassword/")[1];
+  const token = router.query.token as string;
+
+  // const token = (
+  //   typeof window !== "undefined" && window.location.href
+  //     ? window.location.href
+  //     : ""
+  // ).split("/auth/resetpassword/")[1];
 
   const {
     register,
@@ -73,21 +75,21 @@ const ResetPassword = () => {
               <FaLock />
               <input
                 type="password"
-                id="newPassword"
-                {...register("newPassword")}
+                id="password"
+                {...register("password")}
                 placeholder="Enter new password"
               />
-              <p>{errors.newPassword?.message}</p>
+              <p>{errors.password?.message}</p>
             </div>
             <div className="input-group">
               <FaUnlockAlt />
               <input
                 type="password"
-                id="confirmNewPassword"
-                {...register("confirmNewPassword")}
+                id="confirmPassword"
+                {...register("confirmPassword")}
                 placeholder="Enter confirm new password"
               />
-              <p>{errors.newPassword?.message}</p>
+              <p>{errors.password?.message}</p>
             </div>
             <button type="submit" className="btn-brand">
               Reset Password

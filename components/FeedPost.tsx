@@ -14,10 +14,9 @@ import {
   FaShareSquare,
 } from "react-icons/fa";
 import { socket } from "../pages/feed";
-import { postInterface } from "../slices/postSlice";
+import { Comment, postInterface } from "../slices/postSlice";
 import { userInterface } from "../slices/userSlice";
 import { disLikePost, likePost, makeComment, sharePost } from "../utils/api";
-import Loader from "./Loader";
 import SingleComment from "./SingleComment";
 
 const FeedPost = (props: {
@@ -194,41 +193,23 @@ const FeedPost = (props: {
             <>
               <div className="comments">
                 {!showAllComments
-                  ? post.comments.map(
-                      (
-                        comment: {
-                          user: string;
-                          name: string;
-                          comment: string;
-                        },
-                        index: number
-                      ) => {
-                        if (index > 1) return;
-                        return (
-                          <SingleComment
-                            comment={comment}
-                            user={user}
-                            key={`comment-${index}`}
-                          />
-                        );
-                      }
-                    )
-                  : post.comments.map(
-                      (
-                        comment: {
-                          user: string;
-                          name: string;
-                          comment: string;
-                        },
-                        index: number
-                      ) => (
+                  ? post.comments.map((comment: Comment, index: number) => {
+                      if (index > 1) return;
+                      return (
                         <SingleComment
                           comment={comment}
                           user={user}
                           key={`comment-${index}`}
                         />
-                      )
-                    )}
+                      );
+                    })
+                  : post.comments.map((comment: Comment, index: number) => (
+                      <SingleComment
+                        comment={comment}
+                        user={user}
+                        key={`comment-${index}`}
+                      />
+                    ))}
                 {post.comments.length > 2 && (
                   <button
                     className="btn-brand"

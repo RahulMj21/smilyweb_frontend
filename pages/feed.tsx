@@ -142,7 +142,7 @@ function feed() {
               <div className="top">
                 <Image
                   src={
-                    user.avatar.secure_url
+                    user?.avatar?.secure_url
                       ? user.avatar.secure_url
                       : "/images/dummy_avatar.png"
                   }

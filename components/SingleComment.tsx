@@ -1,17 +1,18 @@
 import React from "react";
+import { Comment } from "../slices/postSlice";
 import { userInterface } from "../slices/userSlice";
 
 const SingleComment = ({
   comment,
   user,
 }: {
-  comment: { user: string; name: string; comment: string };
+  comment: Comment;
   user: userInterface;
 }) => {
   return (
     <div className="comment">
       <p className="userName">
-        {comment.user === user._id ? "You" : comment.name}
+        {comment.user._id === user._id ? "You" : comment.user.name}
       </p>
       <p className="userSeperator">:</p>
       <p className="userComment">{comment.comment}</p>

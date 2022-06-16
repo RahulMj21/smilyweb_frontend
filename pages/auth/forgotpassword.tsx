@@ -4,7 +4,7 @@ import { object, string, TypeOf } from "zod";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
-import { getCurrentUser, loginUser } from "../../utils/api";
+import { getCurrentUser, forgotPassword } from "../../utils/api";
 import { useRouter } from "next/router";
 import showConcentScreen from "../../utils/showConcentScreen";
 import { FaEnvelope, FaLock } from "react-icons/fa";
@@ -26,8 +26,16 @@ const loginUserSchema = object({
 
 export type loginUserInput = TypeOf<typeof loginUserSchema>;
 
-const Login = () => {
-  const dispatch = useDispatch();
+const ForgotPasswordSchema = object({
+  email: string({
+    required_error: "please provide your name",
+  })
+    .email("please enter a valid email")
+    .nonempty("please enter an email"),
+});
+export type ForgotPasswordInput = TypeOf<typeof ForgotPasswordSchema>;
+
+const ForgotPassword = () => {
   const router = useRouter();
   const alert = useAlert();
 
@@ -37,17 +45,18 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<loginUserInput>({
-    resolver: zodResolver(loginUserSchema),
+  } = useForm<ForgotPasswordInput>({
+    resolver: zodResolver(ForgotPasswordSchema),
   });
 
-  const onSubmit = async (values: loginUserInput) => {
+  const onSubmit = async (input: { email: string }) => {
     try {
       setLoading(true);
-      const { data } = await loginUser(values);
-      dispatch(setUser(data.user));
-      alert.success(data.message);
-      router.push("/feed");
+      const { data }: { data: { success: boolean; message: string } } =
+        await forgotPassword(input);
+      if (data.success) {
+        alert.success(data.message);
+      }
     } catch (error: any) {
       alert.error(
         error.response?.data?.message
@@ -93,40 +102,14 @@ const Login = () => {
               />
               <p>{errors.email?.message}</p>
             </div>
-            <div className="input-group">
-              <FaLock />
-              <input
-                type="password"
-                id="password"
-                {...register("password")}
-                placeholder="Enter password"
-              />
-              <p>{errors.password?.message}</p>
-            </div>
             <button type="submit" className="btn-brand">
-              Login
+              Submit
             </button>
           </form>
-          <Link href="/auth/forgotpassword">
-            <a className="forgot-password">Forgot Password ?</a>
-          </Link>
-          <p className="toggle-form">
-            <span>Don't have an account ?</span>
-            <Link href="/auth/register">
-              <a>Register</a>
-            </Link>
-          </p>
-          <p className="or">OR</p>
-          <Link href={showConcentScreen()}>
-            <a className="google-btn">
-              <FcGoogle />
-              Continue with Google
-            </a>
-          </Link>
         </div>
       </div>
     </section>
   );
 };
 
-export default Login;
+export default ForgotPassword;

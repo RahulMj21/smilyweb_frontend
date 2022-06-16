@@ -1,6 +1,8 @@
 import axios from "axios";
+import { ForgotPasswordInput } from "../pages/auth/forgotpassword";
 import { loginUserInput } from "../pages/auth/login";
 import { createUserInput } from "../pages/auth/register";
+import { resetPasswordInput } from "../pages/auth/resetpassword/[token]";
 import { updatePasswordInput } from "../pages/auth/updatepassword";
 
 const api = axios.create({
@@ -28,9 +30,10 @@ export const adminAllUsers = () => api.get("/users");
 export const updatePassword = (input: updatePasswordInput) =>
   api.put("/user/password/update", input);
 
-export const fotgotPassword = () => api.get("/user/password/forgot");
+export const forgotPassword = (input: ForgotPasswordInput) =>
+  api.post("/user/password/forgot", input);
 
-export const resetPassword = (token: string, input: any) =>
+export const resetPassword = (token: string, input: resetPasswordInput) =>
   api.put(`/user/password/reset/${token}`, input);
 
 export const updateUserInfo = (input: { name: string; email: string }) =>

@@ -6,8 +6,8 @@ import { getCurrentUser, updatePassword } from "../../utils/api";
 import { FaLock, FaUnlockAlt } from "react-icons/fa";
 import { useAlert } from "react-alert";
 import { NextRouter, useRouter } from "next/router";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../slices/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, setUser } from "../../slices/userSlice";
 import Header from "../../components/Header";
 import PostModal from "../../components/PostModal";
 import Loader from "../../components/Loader";
@@ -34,6 +34,7 @@ export type updatePasswordInput = TypeOf<typeof updatePasswordSchema>;
 const UpdatePassword = () => {
   const dispatch = useDispatch();
   const router: NextRouter = useRouter();
+  const user = useSelector(selectUser);
   const alert = useAlert();
   const [showCreatePostModal, setShowCreatePostModal] =
     useState<Boolean>(false);
@@ -49,10 +50,11 @@ const UpdatePassword = () => {
 
   const onSubmit = async (values: updatePasswordInput) => {
     try {
+      if (!user) return;
       setLoading(true);
       const { data } = await updatePassword(values);
       alert.success(data.message);
-      router.push("/profile/me");
+      router.push(`/profile/${user._id}`);
     } catch (error: any) {
       alert.error(
         error.response?.data?.message
