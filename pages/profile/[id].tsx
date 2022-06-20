@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useAlert } from "react-alert";
+import toast from "react-hot-toast";
 import { FaExternalLinkAlt, FaTools, FaUnlockAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/Header";
@@ -18,8 +18,7 @@ import {
   getUserAllPosts,
 } from "../../utils/api";
 
-const singleUser = () => {
-  const alert = useAlert();
+const SingleUser = () => {
   const router: NextRouter = useRouter();
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -60,7 +59,7 @@ const singleUser = () => {
       const { data } = await getSingleUser(userId);
       setTargetedUser(data.user);
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
@@ -77,7 +76,7 @@ const singleUser = () => {
       setPosts(data.posts);
     } catch (error: any) {
       setPosts([]);
-      alert.error("cannot fetch posts at the moment");
+      toast.error("cannot fetch posts at the moment");
     } finally {
       setLoading(false);
     }
@@ -87,11 +86,11 @@ const singleUser = () => {
     try {
       setLoading(true);
       const { data } = await doFollowUser(userId);
-      alert.success(data.message);
+      toast.success(data.message);
       setIsFollowing(true);
       fetchTargetedUser();
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
@@ -105,11 +104,11 @@ const singleUser = () => {
     try {
       setLoading(true);
       const { data } = await doUnFollowUser(userId);
-      alert.success(data.message);
+      toast.success(data.message);
       setIsFollowing(false);
       fetchTargetedUser();
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
@@ -222,7 +221,7 @@ const singleUser = () => {
                   ))}
                 </div>
               ) : (
-                <p>don't have any post to show</p>
+                <p>{"don't have any post to show"}</p>
               )}
             </div>
           </div>
@@ -232,4 +231,4 @@ const singleUser = () => {
   );
 };
 
-export default singleUser;
+export default SingleUser;

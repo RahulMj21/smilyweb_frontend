@@ -10,8 +10,8 @@ import { useRouter } from "next/router";
 import showConcentScreen from "../../utils/showConcentScreen";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../slices/userSlice";
-import { useAlert } from "react-alert";
 import Loader from "../../components/Loader";
+import toast from "react-hot-toast";
 
 const createUserSchema = object({
   name: string({
@@ -38,7 +38,6 @@ const createUserSchema = object({
 export type createUserInput = TypeOf<typeof createUserSchema>;
 
 const Register = () => {
-  const alert = useAlert();
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -57,10 +56,10 @@ const Register = () => {
       setLoading(true);
       const { data } = await registerUser(values);
       dispatch(setUser(data.user));
-      alert.success(data.message);
+      toast.success(data.message);
       router.push("/feed");
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message

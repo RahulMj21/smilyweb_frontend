@@ -9,12 +9,10 @@ import { selectIsLoggedIn, setUser } from "../slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
-import { AlertManager, useAlert } from "react-alert";
 
 const Home: NextPage = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const dispatch = useDispatch();
-  const alert: AlertManager = useAlert();
   const router: NextRouter = useRouter();
 
   const [loading, setLoading] = useState<Boolean>(true);

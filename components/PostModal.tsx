@@ -1,13 +1,12 @@
 import Image from "next/image";
 import React, { useRef, useState } from "react";
-import { useAlert } from "react-alert";
 import { FaFileImage, FaHandPointRight, FaTimes } from "react-icons/fa";
 import { createPost } from "../utils/api";
 import { socket } from "../pages/feed";
 import Loader from "./Loader";
+import toast from "react-hot-toast";
 
 const PostModal = (props: { setShowCreatePostModal: Function }) => {
-  const alert = useAlert();
   const fileRef = useRef<HTMLInputElement>(null);
   const captionRef = useRef<HTMLInputElement>(null);
 
@@ -27,7 +26,7 @@ const PostModal = (props: { setShowCreatePostModal: Function }) => {
         setPostImage(reader.result);
       };
     } catch (error: any) {
-      alert.error(error.message);
+      toast.error(error.message);
     }
   };
 
@@ -39,10 +38,10 @@ const PostModal = (props: { setShowCreatePostModal: Function }) => {
         image: postImage as string,
         caption: captionRef.current?.value,
       });
-      alert.success(data.message);
+      toast.success(data.message);
       socket.emit("postNew", data.post);
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message

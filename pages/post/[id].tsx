@@ -1,7 +1,6 @@
-import Image from "next/image";
 import { NextRouter, useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { AlertManager, useAlert } from "react-alert";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import FeedPost from "../../components/FeedPost";
 import Header from "../../components/Header";
@@ -12,8 +11,7 @@ import { selectUser, setUser, userInterface } from "../../slices/userSlice";
 import { getCurrentUser, getSinglePost } from "../../utils/api";
 import { socket } from "../feed";
 
-const singlePost = () => {
-  const alert: AlertManager = useAlert();
+const SinglePost = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const router: NextRouter = useRouter();
@@ -33,7 +31,7 @@ const singlePost = () => {
       const { data } = await getSinglePost(id as string);
       setPost(data.post);
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
@@ -85,4 +83,4 @@ const singlePost = () => {
   );
 };
 
-export default singlePost;
+export default SinglePost;

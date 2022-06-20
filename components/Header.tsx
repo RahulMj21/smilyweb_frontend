@@ -1,7 +1,7 @@
 import Link from "next/link";
-import Router, { NextRouter, useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import React, { useState } from "react";
-import { useAlert } from "react-alert";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser, selectUser } from "../slices/userSlice";
 import { logoutUser } from "../utils/api";
@@ -10,7 +10,6 @@ import Loader from "./Loader";
 const Header = (props: { setShowCreatePostModal: Function }) => {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
-  const alert = useAlert();
   const router: NextRouter = useRouter();
 
   const [loading, setLoading] = useState<Boolean>(false);
@@ -19,11 +18,11 @@ const Header = (props: { setShowCreatePostModal: Function }) => {
     try {
       setLoading(true);
       const { data } = await logoutUser();
-      alert.success(data.message);
+      toast.success(data.message);
       dispatch(clearUser());
       router.push("/auth/login");
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message

@@ -14,11 +14,11 @@ import { postInterface, selectPosts, setPosts } from "../slices/postSlice";
 import { io } from "socket.io-client";
 import { useAlert } from "react-alert";
 import Loader from "../components/Loader";
+import toast from "react-hot-toast";
 
 export const socket = io(process.env.NEXT_PUBLIC_API_URL as string);
 
-function feed() {
-  const alert = useAlert();
+function Feed() {
   const router: NextRouter = useRouter();
   const user = useSelector(selectUser);
   const posts = useSelector(selectPosts);
@@ -52,7 +52,7 @@ function feed() {
       }
       dispatch(setPosts(newPosts));
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
@@ -73,7 +73,7 @@ function feed() {
       });
       dispatch(setPosts(newPosts));
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
@@ -87,7 +87,7 @@ function feed() {
       const { data } = await getAllPosts();
       dispatch(setPosts(data.posts));
     } catch (error: any) {
-      alert.error("cannot fetch posts at the moment");
+      toast.error("cannot fetch posts at the moment");
     } finally {
       setLoading(false);
     }
@@ -179,4 +179,4 @@ function feed() {
   );
 }
 
-export default feed;
+export default Feed;

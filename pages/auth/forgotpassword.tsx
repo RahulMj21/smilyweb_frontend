@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { object, string, TypeOf } from "zod";
-import { useForm } from "react-hook-form";
-import { FcGoogle } from "react-icons/fc";
-import Link from "next/link";
-import { getCurrentUser, forgotPassword } from "../../utils/api";
 import { useRouter } from "next/router";
-import showConcentScreen from "../../utils/showConcentScreen";
-import { FaEnvelope, FaLock } from "react-icons/fa";
-import { setUser } from "../../slices/userSlice";
-import { useDispatch } from "react-redux";
-import { useAlert } from "react-alert";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { FaEnvelope } from "react-icons/fa";
+import { object, string, TypeOf } from "zod";
 import Loader from "../../components/Loader";
+import { forgotPassword, getCurrentUser } from "../../utils/api";
 
 const loginUserSchema = object({
   email: string({
@@ -37,7 +32,6 @@ export type ForgotPasswordInput = TypeOf<typeof ForgotPasswordSchema>;
 
 const ForgotPassword = () => {
   const router = useRouter();
-  const alert = useAlert();
 
   const [loading, setLoading] = useState<Boolean>(true);
 
@@ -55,10 +49,10 @@ const ForgotPassword = () => {
       const { data }: { data: { success: boolean; message: string } } =
         await forgotPassword(input);
       if (data.success) {
-        alert.success(data.message);
+        toast.success(data.message);
       }
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message

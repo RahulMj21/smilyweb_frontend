@@ -2,7 +2,7 @@ import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import { useAlert } from "react-alert";
+import toast from "react-hot-toast";
 import {
   FaHeart,
   FaRegHeart,
@@ -25,7 +25,6 @@ const FeedPost = (props: {
   final: Boolean;
 }) => {
   const { post, user } = props;
-  const alert = useAlert();
   const commentInputRef = useRef<HTMLInputElement>(null);
   const [toggleLike, setToggleLike] = useState<Boolean>(false);
   const [showLike, setShowLike] = useState<Boolean>(false);
@@ -39,10 +38,10 @@ const FeedPost = (props: {
         comment: commentInputRef.current?.value,
       });
       commentInputRef.current.value = "";
-      alert.success(data.message);
+      toast.success(data.message);
       socket.emit("postUpdate", data.updatedPost);
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
@@ -59,9 +58,9 @@ const FeedPost = (props: {
       navigator.clipboard.writeText(`${origin}/post/${post._id}`);
       const { data } = await sharePost(post._id);
       socket.emit("postShared", post._id);
-      alert.show(data.message);
+      toast.success(data.message);
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
@@ -74,11 +73,11 @@ const FeedPost = (props: {
       const { data } = await likePost(post._id);
       setShowLike(true);
       setToggleLike(true);
-      alert.success(data.message);
+      toast.success(data.message);
       if (data.message === "already liked") return;
       socket.emit("postUpdate", data.updatedPost);
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
@@ -89,11 +88,11 @@ const FeedPost = (props: {
   const handleDisLike = async () => {
     try {
       const { data } = await disLikePost(post._id);
-      alert.success(data.message);
+      toast.success(data.message);
       setToggleLike(false);
       socket.emit("postUpdate", data.updatedPost);
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message

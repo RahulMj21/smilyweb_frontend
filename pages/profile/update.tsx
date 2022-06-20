@@ -10,12 +10,11 @@ import {
   updateUserAvatar,
   updateUserInfo,
 } from "../../utils/api";
-import { useAlert } from "react-alert";
 import Loader from "../../components/Loader";
+import toast from "react-hot-toast";
 
 const UpdateProfile = () => {
   const user = useSelector(selectUser);
-  const alert = useAlert();
   const router: NextRouter = useRouter();
   const dispatch = useDispatch();
 
@@ -34,16 +33,16 @@ const UpdateProfile = () => {
     try {
       setLoading(true);
       if (user !== null) {
-        if (!name && !email) return alert.info("nothing to change");
+        if (!name && !email) return toast.success("nothing to change");
         const { data } = await updateUserInfo({
           name: name ? name : user.name,
           email: email ? email : user.email,
         });
-        alert.success(data.message);
+        toast.success(data.message);
         router.push(`/profile/${user._id}`);
       }
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
@@ -58,11 +57,11 @@ const UpdateProfile = () => {
       if (!user) return;
       setLoading(true);
       const { data } = await updateUserAvatar(updateImage as string);
-      alert.success(data.message);
+      toast.success(data.message);
       router.push(`/profile/${user._id}`);
     } catch (error: any) {
       console.log(error);
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message

@@ -10,8 +10,8 @@ import showConcentScreen from "../../utils/showConcentScreen";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { setUser } from "../../slices/userSlice";
 import { useDispatch } from "react-redux";
-import { useAlert } from "react-alert";
 import Loader from "../../components/Loader";
+import toast from "react-hot-toast";
 
 const loginUserSchema = object({
   email: string({
@@ -29,7 +29,6 @@ export type loginUserInput = TypeOf<typeof loginUserSchema>;
 const Login = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const alert = useAlert();
 
   const [loading, setLoading] = useState<Boolean>(true);
 
@@ -46,10 +45,10 @@ const Login = () => {
       setLoading(true);
       const { data } = await loginUser(values);
       dispatch(setUser(data.user));
-      alert.success(data.message);
+      toast.success(data.message);
       router.push("/feed");
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
@@ -111,7 +110,7 @@ const Login = () => {
             <a className="forgot-password">Forgot Password ?</a>
           </Link>
           <p className="toggle-form">
-            <span>Don't have an account ?</span>
+            <span>{"Don't have an account ?"}</span>
             <Link href="/auth/register">
               <a>Register</a>
             </Link>

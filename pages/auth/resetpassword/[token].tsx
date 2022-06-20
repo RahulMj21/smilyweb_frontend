@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { resetPassword } from "../../../utils/api";
 import { NextRouter, useRouter } from "next/router";
 import { FaLock, FaUnlockAlt } from "react-icons/fa";
-import { AlertManager, useAlert } from "react-alert";
 import Loader from "../../../components/Loader";
+import toast from "react-hot-toast";
 
 const resetPasswordSchema = object({
   password: string({
@@ -25,18 +25,11 @@ const resetPasswordSchema = object({
 export type resetPasswordInput = TypeOf<typeof resetPasswordSchema>;
 
 const ResetPassword = () => {
-  const alert: AlertManager = useAlert();
   const router: NextRouter = useRouter();
 
   const [loading, setLoading] = useState<Boolean>(false);
 
   const token = router.query.token as string;
-
-  // const token = (
-  //   typeof window !== "undefined" && window.location.href
-  //     ? window.location.href
-  //     : ""
-  // ).split("/auth/resetpassword/")[1];
 
   const {
     register,
@@ -50,10 +43,10 @@ const ResetPassword = () => {
     try {
       setLoading(true);
       const { data } = await resetPassword(token, input);
-      alert.success(data.message);
+      toast.success(data.message);
       router.push("/auth/login");
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message

@@ -11,6 +11,7 @@ import { selectUser, setUser } from "../../slices/userSlice";
 import Header from "../../components/Header";
 import PostModal from "../../components/PostModal";
 import Loader from "../../components/Loader";
+import toast from "react-hot-toast";
 
 const updatePasswordSchema = object({
   currentPassword: string({
@@ -35,7 +36,6 @@ const UpdatePassword = () => {
   const dispatch = useDispatch();
   const router: NextRouter = useRouter();
   const user = useSelector(selectUser);
-  const alert = useAlert();
   const [showCreatePostModal, setShowCreatePostModal] =
     useState<Boolean>(false);
   const [loading, setLoading] = useState<Boolean>(true);
@@ -53,10 +53,10 @@ const UpdatePassword = () => {
       if (!user) return;
       setLoading(true);
       const { data } = await updatePassword(values);
-      alert.success(data.message);
+      toast.success(data.message);
       router.push(`/profile/${user._id}`);
     } catch (error: any) {
-      alert.error(
+      toast.error(
         error.response?.data?.message
           ? error.response.data.message
           : error.message
